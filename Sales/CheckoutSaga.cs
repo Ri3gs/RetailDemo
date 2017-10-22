@@ -14,7 +14,7 @@
 		IHandleMessages<CheckCustomerPaymentHistoryCommand>,
 		IHandleMessages<PaymentHistoryPositiveEvent>,
 		IHandleMessages<PaymentHistoryNegativeEvent>,
-		IHandleMessages<ChargeCustomerCommand>,
+		IHandleMessages<StartPaymentCommand>,
 		IHandleMessages<PaymentCompletedEvent>,
 		IHandleMessages<PaymentDeniedEvent>,
 		IHandleMessages<SendDeliveryRequestCommand>,
@@ -29,8 +29,21 @@
 
 		protected override void ConfigureHowToFindSaga(SagaPropertyMapper<CheckoutSagaData> mapper)
 		{
-			//TODO: configure mapping
-			throw new System.NotImplementedException();
+			mapper.ConfigureMapping<CheckoutCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<CheckGoodsInStockCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<GoodsInStockEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<GoodsNotInStockEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<CheckCustomerPaymentHistoryCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<PaymentHistoryPositiveEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<PaymentHistoryNegativeEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<StartPaymentCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<PaymentCompletedEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<PaymentDeniedEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<SendDeliveryRequestCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<DeliveryRequestApprovedEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<DeliveryRequestRefusedEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<CreateOrderCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
+			mapper.ConfigureMapping<OrderCreatedEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 		}
 
 		public Task Handle(CheckoutCommand message, IMessageHandlerContext context)
@@ -90,8 +103,8 @@
 
 		public Task Handle(PaymentHistoryPositiveEvent message, IMessageHandlerContext context)
 		{
-			var chargeCustomer = new ChargeCustomerCommand(message.CartId);
-			return context.Send(chargeCustomer);
+			var startPayment = new StartPaymentCommand(message.CartId);
+			return context.Send(startPayment);
 		}
 
 		public Task Handle(PaymentHistoryNegativeEvent message, IMessageHandlerContext context)
@@ -101,7 +114,7 @@
 			return Task.CompletedTask;
 		}
 
-		public Task Handle(ChargeCustomerCommand message, IMessageHandlerContext context)
+		public Task Handle(StartPaymentCommand message, IMessageHandlerContext context)
 		{
 			//TODO: acual charging logic goes here
 

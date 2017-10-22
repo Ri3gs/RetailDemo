@@ -17,7 +17,7 @@ namespace ClientUI
             var transport = endpointConfiguration.UseTransport<LearningTransport>();
 
             var routing = transport.Routing();
-            routing.RouteToEndpoint(typeof(PlaceOrder), "Sales");
+            routing.RouteToEndpoint(typeof(CheckoutCommand), "Sales");
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
@@ -42,13 +42,10 @@ namespace ClientUI
                 {
                     case ConsoleKey.P:
                         // Instantiate the command
-                        var command = new PlaceOrder
-                        {
-                            OrderId = Guid.NewGuid().ToString()
-                        };
+	                    var command = new CheckoutCommand(Guid.NewGuid(), Guid.NewGuid());
 
                         // Send the command
-                        log.Info($"Sending PlaceOrder command, OrderId = {command.OrderId}");
+                        log.Info($"Sending Checkout command, CartId = {command.CartId}");
                         await endpointInstance.Send(command)
                             .ConfigureAwait(false);
 

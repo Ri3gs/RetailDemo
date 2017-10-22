@@ -3,11 +3,11 @@
 	using System;
 	using NServiceBus;
 
-	public class ChargeCustomerCommand : ICommand
+	public class StartPaymentCommand : ICommand
 	{
 		public Guid CartId { get; }
 
-		public ChargeCustomerCommand(Guid cartId)
+		public StartPaymentCommand(Guid cartId)
 		{
 			CartId = cartId;
 		}

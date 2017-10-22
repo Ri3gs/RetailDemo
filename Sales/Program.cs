@@ -13,6 +13,7 @@ namespace Sales
             var endpointConfiguration = new EndpointConfiguration("Sales");
 
             endpointConfiguration.UseTransport<LearningTransport>();
+	        endpointConfiguration.UsePersistence<LearningPersistence>();
 
             var endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
