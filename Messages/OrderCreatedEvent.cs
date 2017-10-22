@@ -1,13 +1,13 @@
-﻿namespace Messages
+namespace Messages
 {
 	using System;
 	using NServiceBus;
 
-	public class GoodsInStockEvent : IEvent
+	public class OrderCreatedEvent : IEvent
 	{
 		public Guid CartId { get; }
 
-		public GoodsInStockEvent(Guid cartId)
+		public OrderCreatedEvent(Guid cartId)
 		{
 			CartId = cartId;
 		}
