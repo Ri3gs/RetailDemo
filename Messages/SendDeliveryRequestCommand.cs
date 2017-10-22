@@ -5,11 +5,6 @@
 
 	public class SendDeliveryRequestCommand : ICommand
 	{
-		public Guid CartId { get; }
-
-		public SendDeliveryRequestCommand(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

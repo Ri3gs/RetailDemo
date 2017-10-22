@@ -5,11 +5,6 @@
 
 	public class GoodsNotInStockEvent : IEvent
 	{
-		public Guid CartId { get; }
-
-		public GoodsNotInStockEvent(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

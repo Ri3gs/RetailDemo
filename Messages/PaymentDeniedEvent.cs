@@ -5,11 +5,6 @@
 
 	public class PaymentDeniedEvent : IEvent
 	{
-		public Guid CartId { get; }
-
-		public PaymentDeniedEvent(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

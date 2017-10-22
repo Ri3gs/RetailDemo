@@ -48,12 +48,14 @@
 
 		public Task Handle(CheckoutCommand message, IMessageHandlerContext context)
 		{
-			Data.Id = message.CartId;
 			Data.CustomerId = message.CustomerId;
 
-			var checkGoodsInStock = new CheckGoodsInStockCommand(message.CartId);
+			var checkGoodsInStock = new CheckGoodsInStockCommand
+			{
+				CartId = message.CartId
+			};
 
-			return context.Send(checkGoodsInStock);
+			return context.SendLocal(checkGoodsInStock);
 		}
 
 		public Task Handle(CheckGoodsInStockCommand message, IMessageHandlerContext context)
@@ -61,20 +63,29 @@
 			//TODO: actual business logic goes here
 
 			//randomly return negative events
-			if (random.Next(0, 3) == 0)
+			if (random.Next(0, 5) == 0)
 			{
-				var goodsNotInStock = new GoodsNotInStockEvent(message.CartId);
+				var goodsNotInStock = new GoodsNotInStockEvent
+				{
+					CartId = message.CartId
+				};
 				return context.Publish(goodsNotInStock);
 			}
 
-			var goodsInStock = new GoodsInStockEvent(message.CartId);
+			var goodsInStock = new GoodsInStockEvent
+			{
+				CartId = message.CartId
+			};
 			return context.Publish(goodsInStock);
 		}
 
 		public Task Handle(GoodsInStockEvent message, IMessageHandlerContext context)
 		{
-			var checkCustomerPaymentHistory = new CheckCustomerPaymentHistoryCommand(message.CartId);
-			return context.Send(checkCustomerPaymentHistory);
+			var checkCustomerPaymentHistory = new CheckCustomerPaymentHistoryCommand
+			{
+				CartId = message.CartId
+			};
+			return context.SendLocal(checkCustomerPaymentHistory);
 		}
 
 		public Task Handle(GoodsNotInStockEvent message, IMessageHandlerContext context)
@@ -82,6 +93,7 @@
 			//TODO: acutal business logic goes here
 			//TODO: compensate and inform customer
 
+			log.Info($"Goods are not in stock for CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
 		}
@@ -93,23 +105,34 @@
 			//randomly return negative events
 			if (random.Next(0, 5) == 0)
 			{
-				var paymentHistoryNegative = new PaymentHistoryNegativeEvent(message.CartId);
+				var paymentHistoryNegative = new PaymentHistoryNegativeEvent
+				{
+					CartId = message.CartId
+				};
 				return context.Publish(paymentHistoryNegative);
 			}
 
-			var paymentHistoryPositive = new PaymentHistoryPositiveEvent(message.CartId);
+			var paymentHistoryPositive = new PaymentHistoryPositiveEvent
+			{
+				CartId = message.CartId
+			};
 			return context.Publish(paymentHistoryPositive);
 		}
 
 		public Task Handle(PaymentHistoryPositiveEvent message, IMessageHandlerContext context)
 		{
-			var startPayment = new StartPaymentCommand(message.CartId);
-			return context.Send(startPayment);
+			var startPayment = new StartPaymentCommand
+			{
+				CartId = message.CartId
+			};
+			return context.SendLocal(startPayment);
 		}
 
 		public Task Handle(PaymentHistoryNegativeEvent message, IMessageHandlerContext context)
 		{
 			//TODO: actual business logic goes here
+
+			log.Info($"Payment history is negative for CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
 		}
@@ -121,24 +144,34 @@
 			//randomly return negative events
 			if (random.Next(0, 5) == 0)
 			{
-				var paymentDenied = new PaymentDeniedEvent(message.CartId);
+				var paymentDenied = new PaymentDeniedEvent
+				{
+					CartId = message.CartId
+				};
 				return context.Publish(paymentDenied);
 			}
 
-			var paymentCompleted = new PaymentCompletedEvent(message.CartId);
+			var paymentCompleted = new PaymentCompletedEvent
+			{
+				CartId = message.CartId
+			};
 			return context.Publish(paymentCompleted);
 		}
 
 		public Task Handle(PaymentCompletedEvent message, IMessageHandlerContext context)
 		{
-			var sendDeliveryRequest = new SendDeliveryRequestCommand(message.CartId);
-			return context.Send(sendDeliveryRequest);
+			var sendDeliveryRequest = new SendDeliveryRequestCommand
+			{
+				CartId = message.CartId
+			};
+			return context.SendLocal(sendDeliveryRequest);
 		}
 
 		public Task Handle(PaymentDeniedEvent message, IMessageHandlerContext context)
 		{
 			//TODO: actual business logic goes here
 
+			log.Info($"Payment denied for CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
 		}
@@ -150,24 +183,33 @@
 			//randomly return negative events
 			if (random.Next(0, 5) == 0)
 			{
-				var deliveryRequestRefused = new DeliveryRequestRefusedEvent(message.CartId);
+				var deliveryRequestRefused = new DeliveryRequestRefusedEvent
+				{
+					CartId = message.CartId
+				};
 				return context.Publish(deliveryRequestRefused);
 			}
 
-			var deliveryRequestApproved = new DeliveryRequestApprovedEvent(message.CartId);
+			var deliveryRequestApproved = new DeliveryRequestApprovedEvent
+			{
+				CartId = message.CartId
+			};
 			return context.Publish(deliveryRequestApproved);
 		}
 
 		public Task Handle(DeliveryRequestApprovedEvent message, IMessageHandlerContext context)
 		{
-			var createOrder = new CreateOrderCommand(message.CartId);
-			return context.Send(createOrder);
+			var createOrder = new CreateOrderCommand
+			{
+				CartId = message.CartId
+			};
+			return context.SendLocal(createOrder);
 		}
 
 		public Task Handle(DeliveryRequestRefusedEvent message, IMessageHandlerContext context)
 		{
 			//TODO: actual business logic goes here
-
+			log.Info($"Delivery request refused for CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
 		}
@@ -175,14 +217,17 @@
 		public Task Handle(CreateOrderCommand message, IMessageHandlerContext context)
 		{
 			//TODO: create order
-			var orderCreated = new OrderCreatedEvent(message.CartId);
+			var orderCreated = new OrderCreatedEvent
+			{
+				CartId = message.CartId
+			};
 			return context.Publish(orderCreated);
 		}
 
 		public Task Handle(OrderCreatedEvent message, IMessageHandlerContext context)
 		{
 			//TODO: actual business logic goes here
-
+			log.Info($"Order created from CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
 		}

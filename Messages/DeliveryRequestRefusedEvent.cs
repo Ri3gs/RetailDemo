@@ -5,11 +5,6 @@
 
 	public class DeliveryRequestRefusedEvent : IEvent
 	{
-		public Guid CartId { get; }
-
-		public DeliveryRequestRefusedEvent(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

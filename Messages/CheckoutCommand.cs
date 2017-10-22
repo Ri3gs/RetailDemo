@@ -5,13 +5,7 @@
 
 	public class CheckoutCommand : ICommand
 	{
-		public Guid CartId { get; }
-		public Guid CustomerId { get; }
-
-		public CheckoutCommand(Guid cartId, Guid customerId)
-		{
-			CartId = cartId;
-			CustomerId = customerId;
-		}
+		public Guid CartId { get; set; }
+		public Guid CustomerId { get; set; }
 	}
 }

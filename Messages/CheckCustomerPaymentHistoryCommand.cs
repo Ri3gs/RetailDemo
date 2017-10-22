@@ -5,11 +5,6 @@
 
 	public class CheckCustomerPaymentHistoryCommand : ICommand
 	{
-		public Guid CartId { get; }
-
-		public CheckCustomerPaymentHistoryCommand(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

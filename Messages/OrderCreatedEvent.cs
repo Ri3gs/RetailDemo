@@ -5,11 +5,6 @@ namespace Messages
 
 	public class OrderCreatedEvent : IEvent
 	{
-		public Guid CartId { get; }
-
-		public OrderCreatedEvent(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

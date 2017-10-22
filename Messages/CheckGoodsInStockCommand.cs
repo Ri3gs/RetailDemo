@@ -5,11 +5,6 @@
 
 	public class CheckGoodsInStockCommand : ICommand
 	{
-		public Guid CartId { get; }
-
-		public CheckGoodsInStockCommand(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

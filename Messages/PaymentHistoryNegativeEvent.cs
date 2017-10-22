@@ -5,11 +5,6 @@
 
 	public class PaymentHistoryNegativeEvent : IEvent
 	{
-		public Guid CartId { get; }
-
-		public PaymentHistoryNegativeEvent(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

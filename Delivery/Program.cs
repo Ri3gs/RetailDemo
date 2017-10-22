@@ -8,9 +8,9 @@
 	{
 		static async Task Main(string[] args)
 		{
-			Console.Title = "Shipping";
+			Console.Title = "Delivery";
 
-			var endpointConfiguration = new EndpointConfiguration("Shipping");
+			var endpointConfiguration = new EndpointConfiguration("Delivery");
 
 			endpointConfiguration.UseTransport<LearningTransport>();
 

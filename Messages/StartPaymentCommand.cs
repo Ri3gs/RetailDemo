@@ -5,11 +5,6 @@
 
 	public class StartPaymentCommand : ICommand
 	{
-		public Guid CartId { get; }
-
-		public StartPaymentCommand(Guid cartId)
-		{
-			CartId = cartId;
-		}
+		public Guid CartId { get; set; }
 	}
 }

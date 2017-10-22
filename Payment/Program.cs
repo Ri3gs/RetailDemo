@@ -8,9 +8,9 @@ namespace Billing
     {
         static async Task Main()
         {
-            Console.Title = "Billing";
+            Console.Title = "Payment";
 
-            var endpointConfiguration = new EndpointConfiguration("Billing");
+            var endpointConfiguration = new EndpointConfiguration("Payment");
 
             endpointConfiguration.UseTransport<LearningTransport>();
 
