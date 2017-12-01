@@ -11,7 +11,6 @@
 		IHandleMessages<CheckGoodsInStockCommand>,
 		IHandleMessages<GoodsInStockEvent>,
 		IHandleMessages<GoodsNotInStockEvent>,
-		IHandleMessages<CheckCustomerPaymentHistoryCommand>,
 		IHandleMessages<PaymentHistoryPositiveEvent>,
 		IHandleMessages<PaymentHistoryNegativeEvent>,
 		IHandleMessages<StartPaymentCommand>,
@@ -33,7 +32,6 @@
 			mapper.ConfigureMapping<CheckGoodsInStockCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 			mapper.ConfigureMapping<GoodsInStockEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 			mapper.ConfigureMapping<GoodsNotInStockEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
-			mapper.ConfigureMapping<CheckCustomerPaymentHistoryCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 			mapper.ConfigureMapping<PaymentHistoryPositiveEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 			mapper.ConfigureMapping<PaymentHistoryNegativeEvent>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
 			mapper.ConfigureMapping<StartPaymentCommand>(message => message.CartId).ToSaga(sagaData => sagaData.CartId);
@@ -83,9 +81,10 @@
 		{
 			var checkCustomerPaymentHistory = new CheckCustomerPaymentHistoryCommand
 			{
-				CartId = message.CartId
+				CartId = message.CartId,
+				CustomerId = Data.CustomerId
 			};
-			return context.SendLocal(checkCustomerPaymentHistory);
+			return context.Send(checkCustomerPaymentHistory);
 		}
 
 		public Task Handle(GoodsNotInStockEvent message, IMessageHandlerContext context)
@@ -96,27 +95,6 @@
 			log.Info($"Goods are not in stock for CartId {message.CartId}");
 			MarkAsComplete();
 			return Task.CompletedTask;
-		}
-
-		public Task Handle(CheckCustomerPaymentHistoryCommand message, IMessageHandlerContext context)
-		{
-			//TODO: acutal business logic goes here
-
-			//randomly return negative events
-			if (random.Next(0, 5) == 0)
-			{
-				var paymentHistoryNegative = new PaymentHistoryNegativeEvent
-				{
-					CartId = message.CartId
-				};
-				return context.Publish(paymentHistoryNegative);
-			}
-
-			var paymentHistoryPositive = new PaymentHistoryPositiveEvent
-			{
-				CartId = message.CartId
-			};
-			return context.Publish(paymentHistoryPositive);
 		}
 
 		public Task Handle(PaymentHistoryPositiveEvent message, IMessageHandlerContext context)

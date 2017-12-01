@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NServiceBus;
+using Messages;
 
 namespace Sales
 {
@@ -12,10 +13,13 @@ namespace Sales
 
             var endpointConfiguration = new EndpointConfiguration("Sales");
 
-            endpointConfiguration.UseTransport<LearningTransport>();
+            var transport = endpointConfiguration.UseTransport<LearningTransport>();
 	        endpointConfiguration.UsePersistence<LearningPersistence>();
 
-            var endpointInstance = await Endpoint.Start(endpointConfiguration)
+			var routing = transport.Routing();
+			routing.RouteToEndpoint(typeof(CheckCustomerPaymentHistoryCommand), "Payment");
+
+			var endpointInstance = await Endpoint.Start(endpointConfiguration)
                 .ConfigureAwait(false);
 
             Console.WriteLine("Press Enter to exit.");
